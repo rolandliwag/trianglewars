@@ -3,8 +3,8 @@
     "port": 3100,
     "server": "../server/lib/app.js",
     "watch": "../",
-    "disgraceful": false,
-    "allowForcedExit": false,
+    "disgraceful": true,
+    "allowForcedExit": true,
     "app": {
         "frontendPath": "http-pub"
     }
