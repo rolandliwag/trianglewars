@@ -17,7 +17,7 @@ function Player(config) {
     this.layer.add(this.node);
 }
 
-Player.prototype.draw = (
+Player.prototype.draw = (function () {
     var accel = 0.05,
         velocity = 0,
         maxSpeed = 10;
@@ -36,4 +36,4 @@ Player.prototype.draw = (
             y: 0
         });
     };
-}
+}());
