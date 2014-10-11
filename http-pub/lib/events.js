@@ -7,6 +7,7 @@ var events = (function () {
         'alienupdate': [],
         'playerupdate': [],
         'playeraction': [],
+        'backendready': [],
 
         // Server events
         'newalien': [],
