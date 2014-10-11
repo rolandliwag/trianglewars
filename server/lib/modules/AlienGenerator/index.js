@@ -35,7 +35,7 @@ function AlienGenerator() {
             }
             allAlliens = allAlliens.concat(aliens);
             context.onNewAliens(aliens);
-        }, 10000);
+        }, 1000);
 
         started = true;
     };
