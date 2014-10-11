@@ -5,13 +5,14 @@ var express = require('express'),
     players = require('./players');
     AlienGenerator = require('./modules/AlienGenerator');
 
+
 function setUpSocketIO(app) {
     var server = require('http').createServer(app),
         io = require('socket.io')(server),
         numActiveSockets = 0,
         generator = new AlienGenerator();
 
-    function beginAlienSimulation() {
+    function beginAlienSimulation(socket) {
         if (!generator.started()) {
             console.log('Starting alien simulator');
 
@@ -22,17 +23,26 @@ function setUpSocketIO(app) {
                 io.emit('newaliens', aliens);
             };
             generator.begin();
+        } else {
+            socket.emit('newaliens', generator.getAlliens());
         }
     }
 
     io.on('connection', function (socket) {
         numActiveSockets += 1;
 
-        beginAlienSimulation();
+        beginAlienSimulation(socket);
 
-        socket.on('message', function (data) {
-            console.log('message:', data);
-            socket.broadcast.emit('message', data);
+        socket.on('playerupdate', function (data) {
+            console.log('playerupdate:', data);
+            var newData = players.update(socket, data);
+            socket.broadcast.emit('playerupdate', newData);
+        });
+
+        socket.on('allienupdate', function (data) {
+            console.log('allienupdate:', data);
+            generator.updateAlliens(data);
+            socket.broadcast.emit('allienupdate', data);
         });
 
         //player arrived
