@@ -1,0 +1,11 @@
+{
+    "workers": 2,
+    "port": 3000,
+    "server": "../server/lib/app.js",
+    "watch": "../",
+    "disgraceful": false,
+    "allowForcedExit": false,
+    "app": {
+        "test": 2
+    }
+}

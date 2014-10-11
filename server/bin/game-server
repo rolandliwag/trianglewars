@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var serverrunner = require('serverrunner');
+
+serverrunner('config/development.cjson');
