@@ -117,8 +117,34 @@ Application.prototype.updatePlayer = function (data) {
     }
 };
 
+Application.prototype.killAliensAt = function (x) {
+    var aliensKilled = [];
+
+    this.entities.forEach(function (entity) {
+        if (!('id' in entity)) {
+            // Not an alien
+            return;
+        }
+
+        var xAlien = entity.node.x();
+console.log(xAlien);
+        if (x > xAlien - 25 && x < xAlien + 25) {
+            console.log('alien dead');
+            entity.die();
+            aliensKilled.push(entity);
+        }
+    });
+
+    aliensKilled.forEach(function (alien) {
+        APP.entities.splice(APP.entities.indexOf(alien), 1);
+    });
+};
+
 var APP;
 
 $(function () {
     APP = new Application();
 });
+
+
+

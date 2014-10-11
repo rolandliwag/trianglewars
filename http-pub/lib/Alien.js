@@ -26,11 +26,14 @@ function Alien(config) {
     this.layer.add(this.node);
 }
 
-Alien.prototype.draw = (function () {
-    return function (frame) {
-        this.node.move({
-            x: 0,
-            y: this.speed
-        });
-    };
-}());
+Alien.prototype.draw = function (frame) {
+    this.node.move({
+        x: 0,
+        y: this.speed
+    });
+};
+
+Alien.prototype.die = function () {
+    this.node.destroy();
+};
+

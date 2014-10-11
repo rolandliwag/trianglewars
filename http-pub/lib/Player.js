@@ -13,13 +13,13 @@ function Player(config) {
     // So we don't flood the backend with reqs
     this.bufferedInterval = null;
 
-    var color = ['red', 'blue', 'orange', 'purple'];
+    this.colors = ['red', 'blue', 'orange', 'purple'];
 
     this.node = new Kinetic.Circle({
         x: (this.playerId % 4) * 100,
         y: 560,
         radius: 20,
-        fill: color[config.playerId] || 'orange',
+        fill: this.colors[config.playerId] || 'brown',
         stroke: 'black',
         strokeWidth: 5
     });
@@ -28,6 +28,17 @@ function Player(config) {
     this.y = config.y;
 
     this.layer.add(this.node);
+
+    // Draw the laser beam hidden
+    this.laser = new Kinetic.Rect({
+        x: 0,
+        y: 0,
+        width: 5,
+        height: 520,
+        stroke: 'transparent',
+        fill: 'transparent'
+    });
+    this.layer.add(this.laser);
 }
 
 Player.prototype.update = function (data) {
@@ -65,6 +76,11 @@ Player.prototype.drawLocal = function (frame) {
         this.speedIncrement = 0;
         this.speed = 0;
     }
+
+    if (events.isKeyPressed(' ')) {
+        this.shoot();
+    }
+
 
     var x = this.node.getPosition().x;
 
@@ -140,4 +156,34 @@ Player.prototype.hasAnythingChanged = function () {
     this.lastValues = newValues;
 
     return thingsChanged;
+};
+
+Player.prototype.shoot = function () {
+    var x = this.node.getPosition().x,
+        player = this;
+
+    if (!this.delayedFireLaser) {
+        this.delayedFireLaser = setTimeout(function () {
+            player.delayedFireLaser = null;
+
+            var delayedGoAwayLaser;
+
+            APP.killAliensAt(x);
+
+            player.laser.setPosition({
+                x: x - 2.5,
+                y: 0
+            });
+            player.laser.fill(player.colors[player.playerId] || 'brown');
+            player.laser.stroke(player.colors[player.playerId] || 'brown');
+
+            if (!delayedGoAwayLaser) {
+                delayedGoAwayLaser = setTimeout(function () {
+                    player.delayedGoAwayLaser = null;
+                    player.laser.fill('transparent');
+                    player.laser.stroke('transparent');
+                }, 100);
+            }
+        }, 0);
+    }
 };

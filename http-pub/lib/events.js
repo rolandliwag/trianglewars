@@ -9,13 +9,11 @@ var events = (function () {
     // Global keyboard event tracking
     $(window).on('keydown', function (evt) {
         var char = String.fromCharCode(evt.keyCode).toUpperCase();
-
         pressed[char] = true;
     });
 
     $(window).on('keyup', function (evt) {
         var char = String.fromCharCode(evt.keyCode).toUpperCase();
-
         pressed[char] = false;
     });
 
