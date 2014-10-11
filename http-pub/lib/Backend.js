@@ -6,12 +6,12 @@ function Backend(cb) {
         cb();
     });
 
-    socket.on('message', function (data) {
-        console.log(data);
-    });
-
     socket.on('newaliens', function (data) {
         events.trigger('newaliens', data);
+    });
+
+    socket.on('playerupdate', function (playerData) {
+        events.trigger('playerupdate', playerData);
     });
 
     this.send = function (type, data) {
