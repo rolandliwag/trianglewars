@@ -19,10 +19,10 @@ function setUpSocketIO(app) {
             // Begin alien population
             generator.onNewAliens = function (aliens) {
                 console.log('New aliens generated: ' + aliens.length);
-
                 io.emit('newaliens', aliens);
             };
             generator.begin();
+
         } else {
             socket.emit('newaliens', generator.getAlliens());
         }
@@ -30,8 +30,6 @@ function setUpSocketIO(app) {
 
     io.on('connection', function (socket) {
         numActiveSockets += 1;
-
-        beginAlienSimulation(socket);
 
         socket.on('playerupdate', function (data) {
             console.log('playerupdate:', data);
@@ -51,10 +49,13 @@ function setUpSocketIO(app) {
         socket.emit('newplayer', { you: you, others: others } );
         socket.broadcast.emit('newplayer', { others: others } );
 
+        beginAlienSimulation(socket);
+
         //player gone
         socket.on('disconnect', function () {
             var p = players.remove(socket);
             console.log('disconnect', p);
+            socket.broadcast.emit('playergone', p);
 
             numActiveSockets -= 1;
             if (numActiveSockets === 0) {
