@@ -2,27 +2,15 @@
  * For making events.
  */
 var events = (function () {
-    var events = {
-        // Client events
-        'alienupdate': [],
-        'playerupdate': [],
-        'playeraction': [],
-        'backendready': [],
-
-        // Server events
-        'newalien': [],
-        'newplayer': [],
-        'bullets': []
-    };
+    var events = {};
 
     return {
         /**
          * Add an event handler
          */
         on: function (event, handler) {
-            if (events[event]) {
-                events[event].push(handler);
-            }
+            events[event] = events[event] || [];
+            events[event].push(handler);
         },
 
         /**
