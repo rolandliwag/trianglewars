@@ -12,9 +12,9 @@ function Alien(config) {
         radius: 40,
         sceneFunc: function(context) {
             context.beginPath();
-            context.moveTo(25, 200);
-            context.lineTo(105, 200);
-            context.lineTo(60, 150);
+            context.moveTo(30, 50);
+            context.lineTo(60, 0);
+            context.lineTo(0, 0);
             context.closePath();
             context.fillStrokeShape(this);
         },
