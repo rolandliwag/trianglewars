@@ -8,6 +8,9 @@ var uniqueID = 0;
 function Alien(config) {
     // Generate alien properties based on config.level
     var level = config.level;
+
+    this.x = _.random(0, 600);
+    this.y = _.random(0, 100);
     this.id = ++uniqueID;
     this.speed = Math.min(1 + (level / 10), 10);
     this.health = _.random(100 + ((level - 1) * 10), 110 + ((level - 1) *20));
