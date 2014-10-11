@@ -18,6 +18,6 @@
   "dependencies": {
     "express": "^4.9.7",
     "jquery": "^2.1.1",
-    "serverrunner": "^0.6.0"
+    "serverrunner": "^0.5.1"
   }
 }
