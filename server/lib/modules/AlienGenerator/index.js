@@ -25,7 +25,8 @@ function AlienGenerator() {
         // Generate new aliens every 10secs
         alienInterval = setInterval(function () {
             var aliens = [],
-                max = _.random(((level - 1) * 2) + 10, Math.pow(level * 5, 2) / 10);
+                //ax = _.random(((level - 1) * 2) + 10, Math.pow(level * 5, 2) / 10);
+                max = _.random(5, 10);
 
             for (var i = 0; i < max; i += 1) {
                 var a = new Alien({level: level});

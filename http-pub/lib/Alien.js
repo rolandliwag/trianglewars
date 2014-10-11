@@ -1,5 +1,6 @@
 function Alien(config) {
     this.layer = config.layer;
+    this.speed = config.speed;
 
     this.id = config.id || 0;
     this.name = ko.observable(config.name);
@@ -26,14 +27,10 @@ function Alien(config) {
 }
 
 Alien.prototype.draw = (function () {
-    var accel = 0.05,
-        velocity = 0,
-        maxSpeed = 10;
-
     return function (frame) {
-
         this.node.move({
-            y: 5
+            x: 0,
+            y: this.speed
         });
     };
 }());
