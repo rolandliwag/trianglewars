@@ -63,6 +63,7 @@ function AlienGenerator() {
                 var idx = allAlliens.indexOf(a);
                 if(idx) {
                     allAlliens.splice(idx, 1);
+                    delete allienMap[aln.id];
                 }
             } else {
                 a.health = aln.health;
