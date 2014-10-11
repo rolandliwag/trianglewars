@@ -38,17 +38,15 @@ function setUpSocketIO(app) {
         //player arrived
         var you = players.add(socket);
         var others = players.getAll();
-        socket.emit('newPlayer', { you: you, others: others } );
-        socket.broadcast.emit('newPlayer', { others: others } );
+        socket.emit('newplayer', { you: you, others: others } );
+        socket.broadcast.emit('newplayer', { others: others } );
 
         //player gone
         socket.on('disconnect', function () {
-
             var p = players.remove(socket);
             console.log('disconnect', p);
 
             numActiveSockets -= 1;
-
             if (numActiveSockets === 0) {
                 console.log('0 players connected. Ending simulation');
                 generator.reset();
