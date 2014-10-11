@@ -3,6 +3,13 @@ function Backend(cb) {
 
     socket.on('sorry', function (data) {
         console.log('sorry', data);
+        events.trigger('sorry', data);
+        cb();
+    });
+
+    socket.on('playergone', function (data) {
+        console.log('playergone', data);
+        events.trigger('playergone', data);
         cb();
     });
 
@@ -20,6 +27,7 @@ function Backend(cb) {
     socket.on('playerupdate', function (playerData) {
         events.trigger('playerupdate', playerData);
     });
+
 
     this.send = function (type, data) {
         socket.emit(type, data);
