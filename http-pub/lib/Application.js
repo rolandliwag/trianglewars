@@ -6,7 +6,13 @@ function Application() {
 
     // Initialize backend connection
     this.backend = new Backend(function () {
-        events.on('newplayer', app.addPlayer);
+        events.on('newplayer', function (data) {
+            app.addPlayer(data);
+        });
+        events.on('playerupdate', function (data) {
+            app.backend.send('playerupdate', data);
+        });
+
         app.backend.send('newplayer', localPlayer);
 
         events.on('newaliens', app.addAliens.bind(app));
@@ -20,7 +26,7 @@ function Application() {
     this.stage = new Kinetic.Stage({
         container: 'play-area',
         width: 700,
-        height: 800
+        height: 600
     });
 
     this.layer = new Kinetic.Layer();
@@ -60,6 +66,21 @@ Application.prototype.end = function () {
     this.gameloop.stop();
 };
 
+Application.prototype.addPlayer = function (config) {
+    this.entities.push(new Player({
+        type: 'remote',
+        name: config.name,
+        id: config.id,
+        layer: this.layer
+    }));
+};
+
+Application.prototype.updatePlayer = function (data) {
+
+};
+
+var APP;
+
 $(function () {
-    var app = new Application();
+    APP = new Application();
 });
