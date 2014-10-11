@@ -16,6 +16,7 @@ function setUpSocketIO(app) {
             socket.broadcast.emit('message', data);
         });
 
+        socket.emit('connected', "hello world");
         socket.broadcast.emit('connected', "hello world");
     });
 
