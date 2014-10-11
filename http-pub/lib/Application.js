@@ -1,21 +1,21 @@
 function Application() {
     var app = this;
 
+    this.localPlayer = null;
     this.entities = [];
     this.gameloop = null;
 
+    // Initialize events
+    events.on('newplayer', function (data) {
+        app.addPlayer(data);
+    });
+    events.on('playerupdate', function (data) {
+        app.updatePlayer(data);
+    });
+    events.on('newaliens', app.addAliens);
+
     // Initialize backend connection
     this.backend = new Backend(function () {
-        events.on('newplayer', function (data) {
-            app.addPlayer(data);
-        });
-        events.on('playerupdate', function (data) {
-            app.updatePlayer(data);
-        });
-
-        app.backend.send('newplayer', localPlayer);
-
-        events.on('newaliens', app.addAliens);
 
         // Start the game loop
         app.gameloop.start();
@@ -36,13 +36,7 @@ function Application() {
     }, this.layer);
 
     // Initialize models
-    var localPlayer = new Player({
-        type: 'local',
-        name: 'Me',
-        layer: this.layer
-    });
-    this.players = ko.observableArray([localPlayer]);
-    this.entities.push(localPlayer);
+    this.players = ko.observableArray([]);
 
     ko.applyBindings(this);
 }
@@ -65,25 +59,59 @@ Application.prototype.end = function () {
 };
 
 Application.prototype.addPlayer = function (config) {
-    this.entities.push(new Player({
-        type: 'remote',
-        name: config.name,
-        id: config.id,
-        layer: this.layer
-    }));
+    var me = config.you,
+        others = config.others;
+
+    if (me) {
+        this.localPlayer = new Player({
+            type: 'local',
+            name: 'Me',
+            playerId: me.playerId,
+            health: me.health,
+            score: me.score,
+            layer: this.layer
+        });
+
+        this.entities.push(this.localPlayer);
+    }
+
+    others.forEach(function (player) {
+        if (this.entities.some(function (entity) {
+            return entity.playerId === player.playerId;
+                })) {
+        } {
+            // player already added
+            console.log('wut');
+            return;
+        }
+
+        if (player.playerId !== this.localPlayer.playerId) {
+            this.entities.push(new Player({
+                type: 'remote',
+                name: 'Player ' + player.playerId,
+                id: player.playerId,
+                health: player.health,
+                score: player.score,
+                layer: this.layer,
+                x: player.position ? player.position.x : 0,
+                y: player.position ? player.position.y : 0
+            }));
+        }
+    }, this);
 };
 
 Application.prototype.updatePlayer = function (data) {
     var player;
 
     this.entities.some(function (entity) {
-        if (entity.id === data.id) {
+        if (entity.playerId === data.playerId) {
             player = entity;
             return true;
         }
     });
 
     if (player) {
+        console.log(player);
         player.update(data);
     }
 };

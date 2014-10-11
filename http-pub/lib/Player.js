@@ -1,10 +1,11 @@
 function Player(config) {
     this.layer = config.layer;
 
-    this.id = config.id || 0;
+    this.playerId = config.playerId || 0;
     this.name = ko.observable(config.name);
     this.type = config.type;
     this.score = ko.observable(0);
+    this.health = ko.observable(config.health || 100);
 
     this.speed = 0;
     this.speedIncrement = 0;
@@ -15,13 +16,16 @@ function Player(config) {
     var color = ['red', 'blue', 'orange', 'purple'];
 
     this.node = new Kinetic.Circle({
-        x: this.id * 100,
+        x: this.playerId * 100,
         y: 560,
         radius: 20,
-        fill: color[config.id] || 'orange',
+        fill: color[config.playerId] || 'orange',
         stroke: 'black',
         strokeWidth: 5
     });
+
+    this.x = config.x;
+    this.y = config.y;
 
     this.layer.add(this.node);
 }
@@ -30,7 +34,9 @@ Player.prototype.update = function (data) {
     this.score(data.score);
     this.name(data.name);
     this.health(data.health);
-    this.speed = data.speed;
+    this.speed = data.position.speed;
+    this.x = data.position.x;
+    this.y = data.position.y;
 };
 
 Player.prototype.draw = function (frame) {
@@ -70,28 +76,53 @@ Player.prototype.drawLocal = function (frame) {
 };
 
 Player.prototype.drawRemote = function (frame) {
-    this.node.move({
-        x: this.speed,
-        y: 0
-    });
+    var x = this.node.getPosition().x;
+
+    if (x < 0) {
+        x = 0;
+        this.node.offsetX(0);
+    } else if (x > 700) {
+        x = 700;
+        this.node.offsetX(700);
+    } else {
+        this.node.move({
+            x: this.speed,
+            y: 0
+        });
+    }
 };
 
 Player.prototype.doBufferedUpdate = function () {
     var player = this;
 
     // So we don't flood the server
-    if (!this.bufferedInterval) {
+    if (!this.bufferedInterval && this.hasAnythingChanged()) {
         this.bufferedInterval = setTimeout(function () {
+            var position = player.node.getPosition();
+
             player.bufferedInterval = null;
             APP.backend.send('playerupdate', {
                 health: 100,
                 score: player.score(),
                 position: {
-                    x: player.node.offsetX(),
-                    y: player.node.offsetY(),
+                    x: position.x,
+                    y: position.y,
                     speed: player.speed
                 }
             });
-        }, 1000);
+        }, 300);
     }
+};
+
+Player.prototype.hasAnythingChanged = function () {
+    var newValues = '' + this.health() + this.score() + this.node.getPosition().x + this.node.offsetY() + this.speed,
+        thingsChanged = false;
+
+    if (newValues !== this.lastValues) {
+        thingsChanged = true;
+    }
+
+    this.lastValues = newValues;
+
+    return thingsChanged;
 };

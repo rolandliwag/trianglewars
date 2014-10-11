@@ -44,6 +44,7 @@ var events = (function () {
          * Trigger all handlers of an event.
          */
         trigger: function (event, data) {
+            console.log(event + ' triggered');
             if (events[event]) {
                 events[event].forEach(function (handler) {
                     handler(data);
