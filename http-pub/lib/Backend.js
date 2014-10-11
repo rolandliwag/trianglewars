@@ -1,4 +1,7 @@
 function Backend() {
+}
+
+Backend.prototype.init = function () {
     var socket = io();
 
     socket.on('connected', function (data) {
@@ -8,4 +11,8 @@ function Backend() {
     socket.on('message', function (data) {
         console.log(data);
     });
-}
+};
+
+Backend.prototype.send = function () {
+    console.log('test');
+};
