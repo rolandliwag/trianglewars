@@ -7,6 +7,10 @@ function Backend(cb) {
         console.log(data);
     });
 
+    socket.on('newaliens', function (data) {
+        events.trigger('newaliens', data);
+    });
+
     this.send = function (type, data) {
         socket.emit(type, data);
     };
