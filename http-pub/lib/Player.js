@@ -48,6 +48,7 @@ Player.prototype.update = function (data) {
     this.speed = data.position.speed;
     this.x = data.position.x;
     this.y = data.position.y;
+    this.shooting = data.position.shooting;
 };
 
 Player.prototype.draw = function (frame) {
@@ -162,6 +163,19 @@ Player.prototype.shoot = function () {
     var x = this.node.getPosition().x,
         player = this;
 
+    if (this.type === 'local') {
+        APP.backend.send('playerupdate', {
+            health: 100,
+            score: player.score(),
+            position: {
+                x: x,
+                y: 560,
+                speed: this.speed,
+                shooting: true
+            }
+        });
+    }
+
     if (!this.delayedFireLaser) {
         this.delayedFireLaser = setTimeout(function () {
             player.delayedFireLaser = null;
@@ -182,6 +196,19 @@ Player.prototype.shoot = function () {
                     player.delayedGoAwayLaser = null;
                     player.laser.fill('transparent');
                     player.laser.stroke('transparent');
+
+                    if (player.type === 'local') {
+                        APP.backend.send('playerupdate', {
+                            health: 100,
+                            score: player.score(),
+                            position: {
+                                x: x,
+                                y: 560,
+                                speed: player.speed,
+                                shooting: false
+                            }
+                        });
+                    }
                 }, 100);
             }
         }, 0);

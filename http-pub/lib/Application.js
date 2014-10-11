@@ -141,18 +141,31 @@ Application.prototype.killAliensAt = function (x) {
 
     var aliensJson = [];
     aliensKilled.forEach(function (alien) {
-        APP.entities.splice(APP.entities.indexOf(alien), 1);
+        this.entities.splice(this.entities.indexOf(alien), 1);
         aliensJson.push({
             id: alien.id,
             health: 0
         });
-    });
+    }, this);
 
-    this.backend.send('alienupdate', aliensJson);
+    if (aliensJson.length) {
+        this.backend.send('allienupdate', aliensJson);
+    }
 };
 
 Application.prototype.removeAliens = function (aliens) {
+    var aliensKilled = [];
+
     aliens.forEach(function (alien) {
+        this.entities.forEach(function (entity) {
+            if (alien.id === entity.id) {
+                entity.die();
+                aliensKilled.push(entity);
+            }
+        });
+    }, this);
+
+    aliensKilled.forEach(function (alien) {
         this.entities.splice(this.entities.indexOf(alien), 1);
     }, this);
 };

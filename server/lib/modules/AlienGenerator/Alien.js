@@ -12,7 +12,7 @@ function Alien(config) {
     this.x = _.random(10, 600);
     this.y = -150;
     this.id = ++uniqueID;
-    this.speed = Math.min(1 + (level / 10), 10);
+    this.speed = Math.min(1 + (level / 10), 10) * 5;
     this.health = _.random(100 + ((level - 1) * 10), 110 + ((level - 1) *20));
     this.points = Math.pow(level * 10, 2) / 10;
 }
