@@ -31,7 +31,7 @@ function setUpSocketIO(app) {
     io.on('connection', function (socket) {
         numActiveSockets += 1;
 
-        if(players.count() < max_players) {
+        if(players.count() > max_players) {
             socket.emit('sorry','cannot join');
             socket.disconnect();
             return;
