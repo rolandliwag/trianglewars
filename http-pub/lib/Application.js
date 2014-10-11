@@ -10,13 +10,12 @@ function Application() {
             app.addPlayer(data);
         });
         events.on('playerupdate', function (data) {
-            app.backend.send('playerupdate', data);
+            app.updatePlayer(data);
         });
 
         app.backend.send('newplayer', localPlayer);
 
         events.on('newaliens', app.addAliens);
-
 
         // Start the game loop
         app.gameloop.start();
@@ -75,7 +74,18 @@ Application.prototype.addPlayer = function (config) {
 };
 
 Application.prototype.updatePlayer = function (data) {
+    var player;
 
+    this.entities.some(function (entity) {
+        if (entity.id === data.id) {
+            player = entity;
+            return true;
+        }
+    });
+
+    if (player) {
+        player.update(data);
+    }
 };
 
 var APP;

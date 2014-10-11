@@ -26,6 +26,13 @@ function Player(config) {
     this.layer.add(this.node);
 }
 
+Player.prototype.update = function (data) {
+    this.score(data.score);
+    this.name(data.name);
+    this.health(data.health);
+    this.speed = data.speed;
+};
+
 Player.prototype.draw = function (frame) {
     if (this.type === 'local') {
         this.drawLocal(frame);
@@ -63,6 +70,10 @@ Player.prototype.drawLocal = function (frame) {
 };
 
 Player.prototype.drawRemote = function (frame) {
+    this.node.move({
+        x: this.speed,
+        y: 0
+    });
 };
 
 Player.prototype.doBufferedUpdate = function () {
@@ -70,7 +81,6 @@ Player.prototype.doBufferedUpdate = function () {
 
     // So we don't flood the server
     if (!this.bufferedInterval) {
-        console.log(this.bufferedInterval);
         this.bufferedInterval = setTimeout(function () {
             player.bufferedInterval = null;
             APP.backend.send('playerupdate', {
@@ -82,6 +92,6 @@ Player.prototype.doBufferedUpdate = function () {
                     speed: player.speed
                 }
             });
-        }, 300);
+        }, 1000);
     }
-};dd
+};
