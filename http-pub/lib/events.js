@@ -7,6 +7,7 @@ var events = (function () {
         'alienupdate': [],
         'playerupdate': [],
         'playeraction': [],
+        'backendready': [],
 
         // Server events
         'newalien': [],
@@ -40,7 +41,6 @@ var events = (function () {
          * Trigger all handlers of an event.
          */
         trigger: function (event) {
-            console.log(event + ' triggered');
             if (events[event]) {
                 events[event].forEach(function (handler) {
                     handler();
