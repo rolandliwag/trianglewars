@@ -8,7 +8,8 @@
     </head>
     <body>
         <div class="top-bar">
-            <div class="score">
+            <div class="score" data-bind="foreach: players">
+                <span class="name" data-bind="css: 'player' + $index"></span>
             </div>
         </div>
 
@@ -23,22 +24,10 @@
         <script src="3rdparty/jquery.js"></script>
         <script src="3rdparty/kinetic.js"></script>
         <script src='3rdparty/knockout.js'></script>
+        <script src="lib/events.js"></script>
+        <script src="lib/Backend.js"></script>
+        <script src="lib/Player.js"></script>
         <script src="lib/Application.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io();
-            socket.on('connected', function (data) {
-                alert("connected " + data );
-
-
-                setTimeout(function () {
-                    socket.emit("message", "test data sent");
-                },2000);
-            });
-
-            socket.on('message', function (data) {
-                console.log(data);
-            });
-        </script>
     </body>
 </html>
