@@ -26,18 +26,19 @@
         <script src="lib/Application.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
-            var socket = io();
-            socket.on('connected', function (data) {
-                alert("connected " + data );
+            $(function(){
+                var socket = io();
+                socket.on('connected', function (data) {
+                    alert("connected " + data );
 
+                    setTimeout(function () {
+                        socket.emit("message", "test data sent");
+                    },2000);
+                });
 
-                setTimeout(function () {
-                    socket.emit("message", "test data sent");
-                },2000);
-            });
-
-            socket.on('message', function (data) {
-                console.log(data);
+                socket.on('message', function (data) {
+                    console.log(data);
+                });
             });
         </script>
     </body>

@@ -1,5 +1,21 @@
 #!/usr/bin/env node
 
-var serverrunner = require('serverrunner');
+var config = {
+    "workers": 2,
+    "port": 3100,
+    "server": "../server/lib/app.js",
+    "watch": "../",
+    "disgraceful": true,
+    "allowForcedExit": true,
+    "app": {
+        "frontendPath": "http-pub"
+    }
+};
 
-serverrunner('config/development.cjson');
+var server = require('../lib/app.js')(config.app);
+
+server.listen(config.port, function() {
+    console.log('Server listening at port:', config.port);
+});
+
+

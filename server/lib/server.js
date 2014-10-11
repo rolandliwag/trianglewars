@@ -16,6 +16,10 @@ function setUpSocketIO(app) {
             socket.broadcast.emit('message', data);
         });
 
+        socket.on('disconnect', function () {
+            console.log('disconnect');
+        });
+
         socket.broadcast.emit('connected', "hello world");
     });
 
