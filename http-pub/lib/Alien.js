@@ -15,7 +15,6 @@ function Alien(config) {
             context.lineTo(105, 200);
             context.lineTo(60, 150);
             context.closePath();
-            // KineticJS specific context method
             context.fillStrokeShape(this);
         },
         fill: '#00D2FF',

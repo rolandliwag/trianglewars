@@ -15,7 +15,7 @@ function Application() {
 
         app.backend.send('newplayer', localPlayer);
 
-        events.on('newaliens', app.addAliens.bind(app));
+        events.on('newaliens', app.addAliens);
 
 
         // Start the game loop
@@ -49,10 +49,9 @@ function Application() {
 }
 
 Application.prototype.addAliens = function (aliens) {
-    var app = this;
     $.each(aliens, function(index, alien){
-        alien.layer = app.layer;
-        app.entities.push(new Alien(alien));
+        alien.layer = APP.layer;
+        APP.entities.push(new Alien(alien));
     });
 };
 

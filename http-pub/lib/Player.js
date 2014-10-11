@@ -17,7 +17,7 @@ function Player(config) {
     this.node = new Kinetic.Circle({
         x: this.id * 100,
         y: 560,
-        radius: 40,
+        radius: 20,
         fill: color[config.id] || 'orange',
         stroke: 'black',
         strokeWidth: 5
@@ -84,4 +84,4 @@ Player.prototype.doBufferedUpdate = function () {
             });
         }, 300);
     }
-};
+};dd
