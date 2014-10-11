@@ -27,7 +27,6 @@ function getPlayer(socket) {
 
 function clearAll() {
     playerSockets = {};
-    playerGameStats = {};
 }
 
 function getAll() {

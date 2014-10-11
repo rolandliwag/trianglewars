@@ -7,7 +7,7 @@
         </style>
     </head>
     <body>
-        <div class="top-bar">
+        <div id="top-bar">
             <div class="score" data-bind="foreach: players">
                 <div data-bind="css: 'player' + $index()">
                     <span class="name" data-bind="text: name"></span>:
@@ -16,11 +16,11 @@
             </div>
         </div>
 
-        <div class="play-area">
+        <div id="play-area">
             Loading...
         </div>
 
-        <footer class="bottom-area">
+        <footer id="bottom-area">
             &copy; 2014
         </footer>
 
