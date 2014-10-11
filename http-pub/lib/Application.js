@@ -1,5 +1,7 @@
 function Application() {
-    console.log('hai');
+    // Initialize modules/models
+
+    // Start the game loop
 }
 
 $(function () {

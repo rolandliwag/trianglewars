@@ -1,13 +1,11 @@
-var express = require('express');
+var express = require('express'),
+    compiless = require('express-compiless');
 
 module.exports = function (config) {
     var app = express();
 
-    app.all('/', function (req, res, next) {
-        res.send('ok');
-    });
-
-    app.use(express.static(__dirname + "/../../http-pub"));
+    app.use(compiless({root: config.frontendPath}));
+    app.use(express.static(config.frontendPath));
 
     return app;
 };
