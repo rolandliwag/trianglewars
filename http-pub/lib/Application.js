@@ -9,7 +9,6 @@ function Application() {
         name: 'Me'
     });
     this.players = ko.observableArray([localPlayer]);
-    this.players.push();
 
     // Initialize backend connection
     this.backend = new Backend(function () {
