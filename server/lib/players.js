@@ -1,5 +1,7 @@
 var _ = require('underscore'),
     uniqueId = require('./uniqueId');
+    var DEF_HEALTH = 10,
+        DEF_SCORE = 0;
 
 var playerSockets = {},
     playerGameStats = {};
@@ -7,9 +9,19 @@ var playerSockets = {},
 function addPlayer(socket) {
     if(!socket.playerId) {
         socket.playerId = uniqueId.getNextPlayer();
-        playerSockets[socket.playerId] = { playerId: socket.playerId, health: 10 } ;
+        playerSockets[socket.playerId] = { playerId: socket.playerId, health: DEF_HEALTH , score: DEF_SCORE } ;
     }
     return  playerSockets[socket.playerId];
+}
+
+function updatePlayer(socket, data) {
+    var player = getPlayer(socket);
+    if (player) {
+        player.health =  data.health;
+        player.score =  data.score;
+        playerSockets[player.playerId] = player;
+    }
+    return player;
 }
 
 function removePlayer(socket) {
@@ -42,5 +54,6 @@ module.exports = {
     remove : removePlayer,
     get: getPlayer,
     clearAll: clearAll,
-    getAll : getAll
+    getAll : getAll,
+    update : updatePlayer
 };
