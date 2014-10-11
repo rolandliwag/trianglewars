@@ -18,21 +18,29 @@ function Player(config) {
 }
 
 Player.prototype.draw = (function () {
-    var accel = 0.05,
-        velocity = 0,
-        maxSpeed = 10;
+    var accel = 0.01,
+        speed = 0,
+        speedIncrement = 0,
+        maxSpeed = 5;
 
     return function (frame) {
-        var x = 0;
+        if (events.isKeyPressed('a') || events.isKeyPressed('d')) {
+            speedIncrement = Math.max(speedIncrement + accel * frame.timeDiff);
 
-        if (events.isKeyPressed('a')) {
-            x = -0.1 * frame.timeDiff;
-        } else if (events.isKeyPressed('d')) {
-            x = 0.1 * frame.timeDiff;
+            if (events.isKeyPressed('a')) {
+                speed -= speedIncrement;
+                speed = Math.max(-speedIncrement, -maxSpeed);
+            } else {
+                speed += speedIncrement;
+                speed = Math.min(speedIncrement, maxSpeed);
+            }
+        } else {
+            speedIncrement = 0;
+            speed = 0;
         }
 
         this.node.move({
-            x: x,
+            x: speed,
             y: 0
         });
     };
