@@ -1,11 +1,15 @@
 var Alien = require('./Alien.js'),
     _ = require('underscore');
 
+
+
 function AlienGenerator() {
     var level = 1,
         levelInterval,
         alienInterval,
-        started = false;
+        started = false,
+        allAlliens = [],
+        allienMap = {};
 
     // Begin the simulation
     this.begin = function () {
@@ -24,11 +28,11 @@ function AlienGenerator() {
                 max = _.random(((level - 1) * 2) + 10, Math.pow(level * 5, 2) / 10);
 
             for (var i = 0; i < max; i += 1) {
-                aliens.push(new Alien({
-                    level: level
-                }));
+                var a = new Alien({level: level});
+                aliens.push(a);
+                allienMap[a.id] = a;
             }
-
+            allAlliens = allAlliens.concat(aliens);
             context.onNewAliens(aliens);
         }, 10000);
 
@@ -50,6 +54,28 @@ function AlienGenerator() {
 
     // This should be set
     this.onNewAliens = function () {};
+
+    this.updateAlliens = function (alliens) {
+        alliens.forEach( function (aln) {
+            var a = allienMap[aln.id];
+            if(aln.health === 0) {
+                var idx = allAlliens.indexOf(a);
+                if(idx) {
+                    allAlliens.splice(idx, 1);
+                }
+            } else {
+                a.health = aln.health;
+                a.points = aln.points;
+                a.speed = aln.speed;
+            }
+        });
+    }
+
+    this.getAlliens = function() {
+        return allAlliens;
+    }
+
+
 };
 
 module.exports = AlienGenerator;

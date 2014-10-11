@@ -17,6 +17,7 @@ function addPlayer(socket) {
 function updatePlayer(socket, data) {
     var player = getPlayer(socket);
     if (player) {
+        player.position = data.position;
         player.health =  data.health;
         player.score =  data.score;
         playerSockets[player.playerId] = player;

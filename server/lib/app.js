@@ -12,7 +12,7 @@ function setUpSocketIO(app) {
         numActiveSockets = 0,
         generator = new AlienGenerator();
 
-    function beginAlienSimulation() {
+    function beginAlienSimulation(socket) {
         if (!generator.started()) {
             console.log('Starting alien simulator');
 
@@ -23,13 +23,15 @@ function setUpSocketIO(app) {
                 io.emit('newaliens', aliens);
             };
             generator.begin();
+        } else {
+            socket.emit('newaliens', generator.getAlliens());
         }
     }
 
     io.on('connection', function (socket) {
         numActiveSockets += 1;
 
-        beginAlienSimulation();
+        beginAlienSimulation(socket);
 
         socket.on('playerupdate', function (data) {
             console.log('playerupdate:', data);
@@ -39,10 +41,9 @@ function setUpSocketIO(app) {
 
         socket.on('allienupdate', function (data) {
             console.log('allienupdate:', data);
-            var updatedData = generator.updateAllien(data);
-            socket.broadcast.emit('allienupdate', updatedData);
+            generator.updateAlliens(data);
+            socket.broadcast.emit('allienupdate', data);
         });
-
 
         //player arrived
         var you = players.add(socket);
