@@ -31,13 +31,12 @@ module.exports = function (config) {
     var app = express();
 
     app.use(json());
-
-    app.all('/', function (req, res, next) {
-        res.send('ok');
-    });
-
     app.use(compiless({root: config.frontendPath}));
     app.use(express.static(config.frontendPath));
+
+    app.get('/', function (req, res, next) {
+        res.send('ok');
+    });
 
     return setUpSocketIO(app);
 };
