@@ -76,20 +76,22 @@ Application.prototype.addPlayer = function (config) {
     }
 
     others.forEach(function (player) {
+        /*
         if (this.entities.some(function (entity) {
             return entity.playerId === player.playerId;
                 })) {
         } {
             // player already added
-            console.log('wut');
             return;
-        }
+        }*/
+
+        console.log('Player ' + player.playerId + ' added');
 
         if (player.playerId !== this.localPlayer.playerId) {
             this.entities.push(new Player({
                 type: 'remote',
                 name: 'Player ' + player.playerId,
-                id: player.playerId,
+                playerId: player.playerId,
                 health: player.health,
                 score: player.score,
                 layer: this.layer,
@@ -111,7 +113,6 @@ Application.prototype.updatePlayer = function (data) {
     });
 
     if (player) {
-        console.log(player);
         player.update(data);
     }
 };
