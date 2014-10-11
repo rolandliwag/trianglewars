@@ -31,15 +31,15 @@ function setUpSocketIO(app) {
     io.on('connection', function (socket) {
         numActiveSockets += 1;
 
-        if(players.count() > max_players) {
-            socket.emit('sorry','cannot join');
-            socket.disconnect();
-            return;
-        }
+//        if(players.count() > max_players) {
+//            socket.emit('sorry','cannot join');
+//            socket.disconnect();
+//            return;
+//        }
 
         socket.on('playerupdate', function (data) {
-            console.log('playerupdate:', data);
             var newData = players.update(socket, data);
+            console.log('playerupdate:', newData);
             socket.broadcast.emit('playerupdate', newData);
         });
 
