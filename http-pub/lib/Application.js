@@ -23,6 +23,17 @@ function Application() {
         }, 1000 / 60); // 60fps
     });
 
+    // init the canvas layer
+    this.stage = new Kinetic.Stage({
+        container: 'play-area',
+        width: 700,
+        height: 800
+    });
+
+    this.layer = new Kinetic.Layer();
+
+    this.stage.add(this.layer);
+
     ko.applyBindings(this);
 }
 
