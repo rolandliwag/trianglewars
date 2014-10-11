@@ -7,7 +7,10 @@ function Application() {
 
     // Initialize modules/models
     this.players = ko.observableArray();
-    this.players.push(new Player({type: 'local'}));
+    this.players.push(new Player({
+        type: 'local',
+        name: 'Me'
+    }));
 
     // Start the game loop
     events.on('backendready', function () {
