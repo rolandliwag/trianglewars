@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.9.7",
+    "express-json": "^1.0.0",
     "jquery": "^2.1.1",
     "kinetic": "^5.0.6",
     "serverrunner": "^0.5.1",
