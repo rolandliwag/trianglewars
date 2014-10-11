@@ -1,4 +1,5 @@
 var express = require('express'),
+    compiless = require('express-compiless'),
     io = require('socket.io'),
     json = require('express-json');
 
@@ -35,7 +36,8 @@ module.exports = function (config) {
         res.send('ok');
     });
 
-    app.use(express.static(__dirname + "/../../http-pub"));
+    app.use(compiless({root: config.frontendPath}));
+    app.use(express.static(config.frontendPath));
 
     return setUpSocketIO(app);
 };

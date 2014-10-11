@@ -6,6 +6,6 @@
     "disgraceful": false,
     "allowForcedExit": false,
     "app": {
-        "test": 2
+        "frontendPath": "http-pub"
     }
 }
