@@ -43,8 +43,6 @@ Application.prototype.run = function (frame) {
     this.entities.forEach(function (entity) {
         entity.draw(frame);
     });
-
-    this.stage.add(this.layer);
 };
 
 Application.prototype.end = function () {
@@ -54,21 +52,3 @@ Application.prototype.end = function () {
 $(function () {
     var app = new Application();
 });
-
-
-
-function Ship(app) {
-    this.app = app;
-    this.currentShip = new Kinetic.Circle({
-        x : 100,
-        y : 770,
-        radius: 20,
-        fill: 'red',
-        stroke: 'black',
-        strokeWidth: 5
-    });
-}
-
-Ship.prototype.draw = function () {
-    this.app.layer.add(this.currentShip);
-};

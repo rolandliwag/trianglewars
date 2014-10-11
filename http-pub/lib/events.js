@@ -4,6 +4,21 @@
 var events = (function () {
     var events = {};
 
+    var pressed = {};
+
+    // Global keyboard event tracking
+    $(window).on('keydown', function (evt) {
+        var char = String.fromCharCode(evt.keyCode).toUpperCase();
+
+        pressed[char] = true;
+    });
+
+    $(window).on('keyup', function (evt) {
+        var char = String.fromCharCode(evt.keyCode).toUpperCase();
+
+        pressed[char] = false;
+    });
+
     return {
         /**
          * Add an event handler
@@ -35,6 +50,10 @@ var events = (function () {
                     handler(data);
                 });
             }
+        },
+
+        isKeyPressed: function (key) {
+            return pressed[key.toUpperCase()];
         }
     };
 }());
