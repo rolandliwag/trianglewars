@@ -7,7 +7,7 @@ module.exports = function (config) {
         res.send('ok');
     });
 
-    app.use('/static', express.static(__dirname + "/../../public"));
+    app.use(express.static(__dirname + "/../../http-pub"));
 
     return app;
 };
