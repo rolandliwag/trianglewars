@@ -1,7 +1,7 @@
 function Player(config) {
     this.layer = config.layer;
 
-    this.playerId = config.playerId || 0;
+    this.playerId = config.playerId;
     this.name = ko.observable(config.name);
     this.type = config.type;
     this.score = ko.observable(0);
@@ -16,7 +16,7 @@ function Player(config) {
     var color = ['red', 'blue', 'orange', 'purple'];
 
     this.node = new Kinetic.Circle({
-        x: this.playerId * 100,
+        x: (this.playerId % 4) * 100,
         y: 560,
         radius: 20,
         fill: color[config.playerId] || 'orange',
@@ -66,10 +66,24 @@ Player.prototype.drawLocal = function (frame) {
         this.speed = 0;
     }
 
-    this.node.move({
-        x: this.speed,
-        y: 0
-    });
+    var x = this.node.getPosition().x;
+
+    if (x < -10) {
+        this.x = 0;
+        this.speed = 0;
+        this.speedIncrement = 0;
+        this.node.offsetX(0);
+    } else if (x > 710) {
+        this.x = 700;
+        this.speed = 0;
+        this.speedIncrement = 0;
+        this.node.offsetX(700);
+    } else {
+        this.node.move({
+            x: this.speed,
+            y: 0
+        });
+    }
 
     // Buffered position update to other clients
     this.doBufferedUpdate();
@@ -78,11 +92,12 @@ Player.prototype.drawLocal = function (frame) {
 Player.prototype.drawRemote = function (frame) {
     var x = this.node.getPosition().x;
 
-    if (x < 0) {
-        x = 0;
+    if (x < -10) {
+        this.x = 0;
         this.node.offsetX(0);
-    } else if (x > 700) {
+    } else if (x > 710) {
         x = 700;
+        this.x = 700;
         this.node.offsetX(700);
     } else {
         this.node.move({
