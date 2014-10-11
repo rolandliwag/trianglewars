@@ -2,13 +2,7 @@ function Application() {
     var app = this;
 
     this.entities = [];
-
-    // Initialize modules/models
-    var localPlayer = new Player({
-        type: 'local',
-        name: 'Me'
-    });
-    this.players = ko.observableArray([localPlayer]);
+    this.gameloop = null;
 
     // Initialize backend connection
     this.backend = new Backend(function () {
@@ -16,11 +10,7 @@ function Application() {
         app.backend.send('newplayer', localPlayer);
 
         // Start the game loop
-        app.lastFrameTime = Date.now();
-        app.gameLoop = setInterval(function () {
-            app.run();
-            app.lastFrameTime = Date.now();
-        }, 1000 / 60); // 60fps
+        app.gameloop.start();
     });
 
     // init the canvas layer
@@ -31,24 +21,34 @@ function Application() {
     });
 
     this.layer = new Kinetic.Layer();
+    this.stage.add(this.layer);
 
-    this.entities.push(new Ship(app));
+    this.gameloop = new Kinetic.Animation(function (frame) {
+        app.run(frame);
+    }, this.layer);
+
+    // Initialize models
+    var localPlayer = new Player({
+        type: 'local',
+        name: 'Me',
+        layer: this.layer
+    });
+    this.players = ko.observableArray([localPlayer]);
+    this.entities.push(localPlayer);
 
     ko.applyBindings(this);
 }
 
-Application.prototype.run = function () {
-    var timeNow = Date.now();
-
+Application.prototype.run = function (frame) {
     this.entities.forEach(function (entity) {
-        entity.draw(timeNow);
+        entity.draw(frame);
     });
 
     this.stage.add(this.layer);
 };
 
 Application.prototype.end = function () {
-    clearInterval(this.gameLoop);
+    this.gameloop.stop();
 };
 
 $(function () {
