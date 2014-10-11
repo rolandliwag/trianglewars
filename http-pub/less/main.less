@@ -1,14 +1,29 @@
 @import 'variables.less';
 
 body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    background-color: white;
+    background-color: @backgroundColor;
     font-family: Verdana, sans-serif;
     font-size: 16px;
 
+    .top-bar {
+        width: 100%;
+        height: @topHeight;
+    }
+
     .play-area {
-        width: 800px;
+        width: @playWidth;
+        height: @playHeight;
         margin: auto;
+    }
+
+    .bottom-area {
+        position: fixed;
+        top: @bottomYOffset;
+        width: 100%;
+        color: @backgroundColor;
+        background-color: @bottomColor;
     }
 }
