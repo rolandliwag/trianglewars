@@ -1,7 +1,9 @@
 var express = require('express'),
     compiless = require('express-compiless'),
     io = require('socket.io'),
-    json = require('express-json');
+    json = require('express-json'),
+    players = require('./players');
+
 
 
 function setUpSocketIO(app) {
@@ -16,8 +18,17 @@ function setUpSocketIO(app) {
             socket.broadcast.emit('message', data);
         });
 
-        socket.emit('connected', "hello world");
-        socket.broadcast.emit('connected', "hello world");
+        //player arrived
+        var you = players.add(socket);
+        var others = players.getAll();
+        socket.emit('newPlayer', { you: you, others: others } );
+        socket.broadcast.emit('newPlayer', { others: others } );
+
+        //player gone
+        socket.on('disconnect', function () {
+            var p = players.remove(socket);
+            console.log('disconnect', p);
+        });
     });
 
     return server;

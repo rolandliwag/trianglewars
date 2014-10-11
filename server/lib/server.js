@@ -26,7 +26,6 @@ function setUpSocketIO(app) {
     return server;
 }
 
-
 module.exports = function (config) {
     var app = express();
 
@@ -39,7 +38,8 @@ module.exports = function (config) {
     });
 
     return setUpSocketIO(app);
-};
+
+}
 
 
 
