@@ -3,8 +3,8 @@ var express = require('express'),
     io = require('socket.io'),
     json = require('express-json'),
     players = require('./players');
-    AlienGenerator = require('./modules/AlienGenerator');
-
+    AlienGenerator = require('./modules/AlienGenerator'),
+    max_players = 3;
 
 function setUpSocketIO(app) {
     var server = require('http').createServer(app),
@@ -30,6 +30,12 @@ function setUpSocketIO(app) {
 
     io.on('connection', function (socket) {
         numActiveSockets += 1;
+
+        if(players.count() < max_players) {
+            socket.emit('sorry','cannot join');
+            socket.disconnect();
+            return;
+        }
 
         socket.on('playerupdate', function (data) {
             console.log('playerupdate:', data);

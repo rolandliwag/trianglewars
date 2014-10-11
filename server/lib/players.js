@@ -50,11 +50,17 @@ function getAll() {
     return players;
 }
 
+
+function getCount() {
+    return Object.keys(playerSockets).length;
+}
+
 module.exports = {
     add : addPlayer,
     remove : removePlayer,
     get: getPlayer,
     clearAll: clearAll,
     getAll : getAll,
-    update : updatePlayer
+    update : updatePlayer,
+    count : getCount
 };

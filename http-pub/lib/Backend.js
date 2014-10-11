@@ -1,8 +1,14 @@
 function Backend(cb) {
     var socket = io();
 
+    socket.on('sorry', function (data) {
+        console.log('sorry', data);
+        cb();
+    });
+
     socket.on('newplayer', function (data) {
         events.trigger('newplayer', data);
+        console.log('newplayer', data);
         cb();
     });
 
