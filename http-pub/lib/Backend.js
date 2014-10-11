@@ -24,6 +24,10 @@ function Backend(cb) {
         cb();
     });
 
+    socket.on('allienupdate', function (data) {
+        events.trigger('allienupdate', data);
+    });
+
     socket.on('playerupdate', function (playerData) {
         events.trigger('playerupdate', playerData);
     });

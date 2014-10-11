@@ -14,6 +14,10 @@ function Application() {
     });
     events.on('newaliens', app.addAliens);
 
+    events.on('allienupdate', function (data) {
+        app.removeAliens(data);
+    });
+
     // Initialize backend connection
     this.backend = new Backend(function () {
 
@@ -127,7 +131,7 @@ Application.prototype.killAliensAt = function (x) {
         }
 
         var xAlien = entity.node.x();
-console.log(xAlien);
+
         if (x > xAlien - 25 && x < xAlien + 25) {
             console.log('alien dead');
             entity.die();
@@ -135,9 +139,22 @@ console.log(xAlien);
         }
     });
 
+    var aliensJson = [];
     aliensKilled.forEach(function (alien) {
         APP.entities.splice(APP.entities.indexOf(alien), 1);
+        aliensJson.push({
+            id: alien.id,
+            health: 0
+        });
     });
+
+    this.backend.send('alienupdate', aliensJson);
+};
+
+Application.prototype.removeAliens = function (aliens) {
+    aliens.forEach(function (alien) {
+        this.entities.splice(this.entities.indexOf(alien), 1);
+    }, this);
 };
 
 var APP;
