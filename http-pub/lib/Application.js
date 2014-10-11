@@ -9,6 +9,9 @@ function Application() {
         events.on('newplayer', app.addPlayer);
         app.backend.send('newplayer', localPlayer);
 
+        events.on('newaliens', app.addAliens.bind(app));
+
+
         // Start the game loop
         app.gameloop.start();
     });
@@ -38,6 +41,14 @@ function Application() {
 
     ko.applyBindings(this);
 }
+
+Application.prototype.addAliens = function (aliens) {
+    var app = this;
+    $.each(aliens, function(index, alien){
+        alien.layer = app.layer;
+        app.entities.push(new Alien(alien));
+    });
+};
 
 Application.prototype.run = function (frame) {
     this.entities.forEach(function (entity) {

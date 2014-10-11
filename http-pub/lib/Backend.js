@@ -12,6 +12,7 @@ function Backend(cb) {
 
     socket.on('newaliens', function (data) {
         events.trigger('newaliens', data);
+        cb();
     });
 
     this.send = function (type, data) {
